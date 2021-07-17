@@ -37,28 +37,43 @@
             }
 
             function movePlayer(command) {
-                console.log(`Moving ${command.playerId} with ${command.keyPressed}`)
-                
+                console.log(`game.movePlayer() -> Moving ${command.playerId} with ${command.keyPressed}`)
+
                 const acceptedMoves = {
                     ArrowUp(player) {
-                        console.log('moving player Up')
+                        console.log('game.movePlayer().ArrownUp -> moving player Up')
+                        if(player.y - 1 >= 0) {
+                            player.y = player.y - 1
+                        }
                     },
                     ArrowRight(player) {
-                        console.log('moving player Right')
+                        console.log('game.movePlayer().ArrownRight -> moving player Right')
+                        if (player.x + 1 < screen.width) {
+                            player.x = player.x + 1
+                        }
                     },
                     ArrowDown(player) {
-                        console.log('moving player Down')
+                        console.log('game.movePlayer().ArrownDown -> moving player Down')
+                        if (player.y + 1 < screen.height) {
+                            player.y = player.y + 1
+                        }
                     },
                     ArrowLeft(player) {
-                        console.log('moving player Left')
+                        console.log('game.movePlayer().ArrownLeft -> moving player Left')
+                        if (player.x - 1 >= 0) {
+                            player.x = player.x - 1
+                        }
                     },
                 }
-                
+
                 const keyPressed = command.keyPressed
                 const player = state.players[command.playerId]
                 const moveFunction = acceptedMoves[keyPressed]
-                moveFunction(player)
-                return //temp
+                if (moveFunction) {
+                    moveFunction(player)
+                }
+
+                return //temp .. cod não utilizado
 
                 if (keyPressed == 'ArrowUp' && player.y - 1 >= 0) {
                     player.y = player.y - 1
@@ -90,7 +105,7 @@
 
         function createKeyboardListener() {
             const state = {
-                observers:[]
+                observers: []
             }
 
             function subscribe(observerFunction) {
@@ -98,7 +113,7 @@
             }
 
             function notifyAll(command) {
-                console.log(`Notifying ${state.observers.length} observers`)
+                console.log(`keyboadListener -> Notifying ${state.observers.length} observers`)
 
                 for (const observerFunction of state.observers) {
                     observerFunction(command)
