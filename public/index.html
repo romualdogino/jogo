@@ -19,10 +19,16 @@
 </head>
 
 <body>
-
+    <button  id="caio">site do Caio</button>
     <canvas id="screen" width="10" height="10"></canvas>
 
     <script type="module">
+        const caio= document.getElementById('caio')
+        
+        caio.onclick = function() {
+            alert(caio)
+        }
+        
         import createGame from "./game.js"
         import createKeyboardListener from "./keyboard-listener.js"
         import renderScreen from "./render-screen.js"
