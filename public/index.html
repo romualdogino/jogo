@@ -15,20 +15,15 @@
             width: 400px;
             height: 400px;
         }
+        
     </style>
+    <script src="/socket.io/socket.io.js"></script>
 </head>
 
 <body>
-    <button  id="caio">site do Caio</button>
     <canvas id="screen" width="10" height="10"></canvas>
 
     <script type="module">
-        const caio= document.getElementById('caio')
-        
-        caio.onclick = function() {
-            alert(caio)
-        }
-        
         import createGame from "./game.js"
         import createKeyboardListener from "./keyboard-listener.js"
         import renderScreen from "./render-screen.js"
@@ -42,12 +37,18 @@
         const screen = document.getElementById('screen')
         renderScreen(screen,game,requestAnimationFrame)
 
-        game.addPlayer({ playerId: 'player1', playerX: 0, playerY: 0 })
-        game.addPlayer({ playerId: 'player2', playerX: 7, playerY: 8 })
-        game.addPlayer({ playerId: 'player3', playerX: 9, playerY: 5 })
+        const socket = io()
 
-        game.addFruit({ fruitId: 'fruit1', fruitX: 3, fruitY: 3 })
-        game.addFruit({ fruitId: 'fruit2', fruitX: 3, fruitY: 5 })
+        socket.on('connect', ()=>{
+            const playerId = socket.id
+            console.log(`player connected on client ${playerId}`)      
+        })
+        socket.on('setup', (state)=>{
+            console.log('log do setup')
+            console.log(state)
+
+            game.state = state
+        })
     </script>
 </body>
 

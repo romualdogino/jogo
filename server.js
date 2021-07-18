@@ -1,11 +1,31 @@
 import express from 'express'
 import http from 'http'
+import createGame from './public/game.js'
+import { Server } from 'socket.io'
 
+const app = express()
+const server = http.createServer(app)
+const sockets = new Server(server)
 
-const app = express(http)
 
 app.use(express.static('public'))
 
-app.listen(3000, ()=>{
+const game = createGame()
+game.addPlayer({ playerId: 'player1', playerX: 0, playerY: 0 })
+game.addPlayer({ playerId: 'player2', playerX: 7, playerY: 8 })
+game.addPlayer({ playerId: 'player3', playerX: 9, playerY: 5 })
+
+game.addFruit({ fruitId: 'fruit1', fruitX: 3, fruitY: 3 })
+game.addFruit({ fruitId: 'fruit2', fruitX: 3, fruitY: 5 })
+console.log(game.state)
+
+sockets.on('connection', (socket)=>{
+    const playerId = socket.id
+    console.log(`> Player connected on server with id: ${playerId}`)
+
+    socket.emit('setup', game.state)
+})
+
+server.listen(3000, () => {
     console.log("funcionando na porta 3000")
 })
